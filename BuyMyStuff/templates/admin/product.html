@@ -1,0 +1,38 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<center>
+    <br>
+    <br>
+    <h3>{{ product.name }}</h3>
+
+    <b>Price:</b> {{ product.price }}<br>
+    <b>User</b> {{ product.creator_id }}<br>
+    <b>Created:</b> {{ product.created_at.strftime("%d.%m.%Y %H:%M:%S") }}<br>
+    <b>Edited:</b> {{ product.updated_at.strftime("%d.%m.%Y %H:%M:%S") }}<br>
+    <b>Availability:</b> {{ product.active }}<br>
+    {% if review_count > 0 %}
+    <b>Grade:</b> {{ avg_grade }} / 5<br>
+    {% endif %}
+    <b>Reviews:</b> {{ review_count }}<br>
+    <b>Description:</b><br> {{ product.description }}
+
+    <h3>Update product</h3>
+
+    <form action="/admin/product/{{ product.id }}/update" method="POST">
+        Name:<br>
+        <input type="text" name="name"><br>
+        Price:<br>
+        <input type="number" name="price" step="0.01" min="0.01"><br>
+        Desc.:<br>
+        <textarea name="description" rows="3" cols="50"></textarea><br>
+        <label for="active">Visible to users</label>
+        <input type="checkbox" name="active" checked><br>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Confirm">
+    </form>
+</center>
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+{% endblock %}

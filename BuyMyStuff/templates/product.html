@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <p>
+        <br>
+        <br>
+        <h3>{{ product.name }}</h3>
+        <b>Price:</b> {{ product.price }} euros<br>
+        {% if review_count > 0 %}
+        <b>Graded:</b> {{ avg_grade }} / 5<br>
+        {% endif %}
+        <b>Reviews:</b> {{ review_count }}<br>
+        <b>Description:</b><br>
+        {{ product.description }}
+    </p>
+</center>
+    {% if session.user_role == 'customer' %}
+<center>
+    <form action="/add_to_cart" method="POST">
+        Quantity: <input type="number" name="quantity" min="1" max="50" value="1" required style="width: 3em">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Add">
+    </form>
+
+    <h3>Review</h3>
+    <form action="/add_review" method="POST">
+        (1-5)<br>
+        <input type="number" name="grade" min="1" max="5" required style="width: 3em;"><br>
+        <br>
+        <textarea name="content" rows="3" cols="50" minlength="1" maxlength="500" required></textarea><br>
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Add">
+    </form>
+</center>
+{% endif %}
+<center>
+    <h3>Reviews</h3>
+</center>
+{% if review_count == 0 %}
+<center "Empty">
+{% endif %}
+
+{% for review in reviews_list %}
+<center>
+    <p>
+        <b>Review: </b> {{ review.created_at.strftime("%d.%m.%Y klo %H:%M") }}<br>
+        <b>Grade: </b> {{ review.grade }} <br>
+        <b>User: </b> {{ review.username }}<br>
+        {{ review.content }}
+    </p>
+</center>
+{% endfor %}
+
+{% endblock %}

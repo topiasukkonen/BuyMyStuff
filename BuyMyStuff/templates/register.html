@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <form action="/register" method="POST">
+        <br>
+        Username:<br>
+        <input type="text" name="username" minlength="1" maxlength="20" required><br>
+        Password:<br>
+        <input type="password" name="password1" minlength="5" maxlength="50" required><br>
+        Password again:<br>
+        <input type="password" name="password2" minlength="5" maxlength="50" required><br>
+        <p>
+            <br>
+            <input type="checkbox" name="create_admin">
+            <label for="create_admin">Create as admin</label>
+        </p>
+        <input type="submit" value="Create account">
+    </form>
+</center>
+{% if error_message %}
+<p style="color: red;">Error: {{ error_message }}</p>
+{% endif %}
+
+{% endblock %}

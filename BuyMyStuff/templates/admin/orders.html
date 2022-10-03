@@ -1,0 +1,39 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<center>
+    <br>
+    <br>
+    <h3>Orders</h3>
+    <table>
+        {% for order in order_list %}
+        {% if order.order_state == 'created' %}
+        <tr>
+            <td>{{ order.created_at.strftime("%d.%m.%Y %H:%M:%S") }}</td>
+            <td>total {{ order.total_sum }}€</td>
+            <td>
+                <form action="/admin/orders" method="POST">
+                    state: waiting
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <input type="submit" value="Handle">
+                </form>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+
+    <h3>Delivered</h3>
+    <table>
+        {% for order in order_list %}
+        {% if order.order_state == 'processed' %}
+        <tr>
+            <td>{{ order.created_at.strftime("%d.%m.%Y %H:%M:%S") }}</td>
+            <td>total {{ order.total_sum }}€</td>
+            <td>state: delivered</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+</center>
+{% endblock %}

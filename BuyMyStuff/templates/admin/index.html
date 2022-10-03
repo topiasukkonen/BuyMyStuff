@@ -1,0 +1,34 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<center>
+    <br>
+    <h3>New product</h3>
+    <form action="/admin" method="POST">
+        Name:<br>
+        <input type="text" name="name" minlength="1" maxlength="30" required><br>
+        Price:<br>
+        <input type="number" name="price" step="0.01" min="0.01" max="1_000_000" required><br>
+        Description:<br>
+        <textarea name="description" rows="3" cols="50" minlength="1" maxlength="500" required></textarea><br>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Create">
+    </form>
+</center>
+{% if error_message %}
+<center>
+    <p style="color: red;">{{ error_message }}</p>
+</center>
+{% endif %}
+<center>
+    <h3>Products</h3>
+    <table>
+        {% for product in products %}
+        <tr>
+            <td><a href="/admin/product/{{ product.id }}">{{ product.name }}</a></td>
+            <td>{{ product.price }}€</td>
+            <td>available: {{ product.active }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</center>
+{% endblock %}

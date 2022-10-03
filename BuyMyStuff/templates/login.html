@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <form action="/login", method="POST">
+        <br>
+        Username:<br>
+        <input type="text" name="username"><br>
+        Password:<br>
+        <input type="password" name="password"><br>
+        <input type="submit" value="Log in">
+    </form>
+</center>
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+
+{% endblock %}

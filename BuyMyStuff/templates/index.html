@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>BuyMyStuff</h1>
+<center>
+    <br>
+    <h3>Products</h3>
+    <p>
+        {% for product in products %}
+        <a href="/product/{{ product.id }}"> {{ product.name }}</a> {{ product.price }}€<br>
+        {% endfor %}
+    </p>
+</center>
+{% endblock %}

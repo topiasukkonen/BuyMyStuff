@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <br>
+    <h3>Order</h3>
+    <p>Total: {{ session.cart_sum }} euros</p>
+    <table>
+        {% for item in items %}
+        <tr>
+            <td><b>{{ item.name }}</b></td>
+            <td>| {{ item.price }}€/item,</td>
+            <td>quantity: {{ item.quantity }},</td>
+            <td>sum: {{ item.sum }}€</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form action="" method="POST" style="font-size:larger;">
+        <input type="submit" value="CONFIRM">
+        <input type="hidden" name="items" value="{{ items }}">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+</center>
+{% endblock %}
