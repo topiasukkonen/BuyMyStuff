@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, url_for
 from app import app
 from services import users, products, cart, orders, reviews
 
@@ -25,9 +25,9 @@ def register():
 
         if users.register(username, password1, role):
             if role == "customer":
-                return redirect("/")
+                return redirect(url_for("index"))
             if role == "admin":
-                return redirect("/admin")
+                return redirect(url_for("admin_products"))
         return render_template("register.html", error_message="Username already in use")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -40,13 +40,13 @@ def login():
         if not users.login(username, password):
             return render_template("login.html", error_message="Wrong username or password")
         if users.role() == "customer":
-            return redirect("/")
+            return redirect(url_for("index"))
         if users.role() == "admin":
-            return redirect("/admin")
+            return redirect(url_for("admin_products"))
 @app.route("/logout")
 def logout():
     users.logout()
-    return redirect("/")
+    return redirect(url_for("index"))
 @app.route("/product/<int:product_id>")
 def show_product(product_id):
     product = products.get(product_id)
@@ -62,11 +62,11 @@ def add_to_cart():
     try:
         quantity = int(request.form["quantity"])
     except:
-        return redirect("/product/" + product_id)
+        return redirect(url_for("show_product"), product_id=product_id)
     if not products.active(product_id) or quantity not in range(1, 51):
-        return redirect("/")
+        return redirect(url_for("index"))
     cart.add(users.user_id(), product_id, quantity)
-    return redirect("/product/" + product_id)
+    return redirect(url_for("show_product"), product_id=product_id)
 
 @app.route("/user/<int:user_id>")
 def user(user_id):
@@ -87,13 +87,13 @@ def checkout(user_id):
         users.check_csrf()
         if items and str(items) == request.form["items"]:
             orders.createorder(items, user_id)
-        return redirect(f"/user/{user_id}")
+        return redirect(url_for("user", user_id=user_id))
 
 @app.route("/delete_cart_item", methods=["POST"])
 def delete_cart_item():
     users.check_csrf()
     cart.delete(request.form["cart_item_id"])
-    return redirect(f"/user/{users.user_id()}")
+    return redirect(url_for("user", user_id=users.user_id()))
 
 @app.route("/add_review", methods=["POST"])
 def add_review():
@@ -107,7 +107,7 @@ def add_review():
             reviews.add(product_id, grade, content)
     except:
         pass
-    return redirect(f"/product/{product_id}")
+    return redirect(url_for("show_product"), product_id=product_id)
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin_products():
@@ -139,7 +139,7 @@ def admin_products():
             return render_with_error("Error")
 
         if products.add(users.user_id(), name, price, description):
-            return redirect("/admin")
+            return redirect(url_for("admin_products"))
         else:
             return render_with_error(f"Already available")
 
@@ -154,7 +154,7 @@ def admin_orders():
         users.check_csrf()
         order_id = request.form["order_id"]
         orders.processorder(order_id)
-        return redirect("/admin/orders")
+        return redirect(url_for("admin_orders"))
 
 @app.route("/admin/product/<int:id>")
 def admin_product(id):
@@ -169,7 +169,7 @@ def admin_product_update(id):
         return render_template("login.html",error_message="No access")
     product = products.get(id)
     if not product:
-        return redirect("/admin")
+        return redirect(url_for("admin_products"))
     new_name = request.form["name"] if request.form["name"] else product.name
     if len(new_name) > 30:
         return _admin_product_with_message(id, "Max 30 characters for name")
@@ -185,13 +185,13 @@ def admin_product_update(id):
         return _admin_product_with_message(id,"""Negative or over 100k prices not allowed""")
     is_active = "active" in request.form
     if products.edit(product.id, new_name, new_price, new_description, is_active):
-        return redirect(f"/admin/product/{id}")
+        return redirect(url_for("admin_product", id=id))
     return _admin_product_with_message(id, f"Product {new_name} already available")
 
 def _admin_product_with_message(id, message):
     product = products.get(id)
     if not product:
-        return redirect("/admin")
+        return redirect(url_for("admin_products"))
     avg_grade = reviews.getavg(id)
     review_count = reviews.count(id)
     return render_template("admin/product.html", product=product, avg_grade=avg_grade,review_count=review_count, error_message=message)

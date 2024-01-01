@@ -1,13 +1,13 @@
 <!doctype html>
-<link rel="stylesheet" href="/static/main.css">
+<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <center>
     <p>
         <span style="float: right;">
             {{ session.username }} |
-            <a href="/admin">Products</a> |
-            <a href="/admin/orders">Orders</a> |
-            <a href="/logout"> Log out</a>
+            <a href="{{url_for('admin_products')}}">Products</a> |
+            <a href="{{url_for('admin_orderds')}}">Orders</a> |
+            <a href="{{url_for('logout')}}"> Log out</a>
         </span>
     </p>
 </center>

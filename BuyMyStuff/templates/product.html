@@ -16,7 +16,7 @@
 </center>
     {% if session.user_role == 'customer' %}
 <center>
-    <form action="/add_to_cart" method="POST">
+    <form action="{{url_for('add_to_cart')}}" method="POST">
         Quantity: <input type="number" name="quantity" min="1" max="50" value="1" required style="width: 3em">
         <input type="hidden" name="product_id" value="{{ product.id }}">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -24,7 +24,7 @@
     </form>
 
     <h3>Review</h3>
-    <form action="/add_review" method="POST">
+    <form action="{{url_for('add_review')}}" method="POST">
         (1-5)<br>
         <input type="number" name="grade" min="1" max="5" required style="width: 3em;"><br>
         <br>

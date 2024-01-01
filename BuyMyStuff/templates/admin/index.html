@@ -3,7 +3,7 @@
 <center>
     <br>
     <h3>New product</h3>
-    <form action="/admin" method="POST">
+    <form action="{{url_for('admin_products')}}" method="POST">
         Name:<br>
         <input type="text" name="name" minlength="1" maxlength="30" required><br>
         Price:<br>
@@ -24,7 +24,7 @@
     <table>
         {% for product in products %}
         <tr>
-            <td><a href="/admin/product/{{ product.id }}">{{ product.name }}</a></td>
+            <td><a href="{{url_for('admin_product', id=product.id)}}">{{ product.name }}</a></td>
             <td>{{ product.price }}€</td>
             <td>available: {{ product.active }}</td>
         </tr>

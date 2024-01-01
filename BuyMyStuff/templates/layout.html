@@ -1,5 +1,5 @@
 <!doctype html>
-<link rel="stylesheet" href="/static/main.css">
+<link rel="stylesheet" href="{{url_for('static', filename='main.css'}}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <center>
     <p>
@@ -7,18 +7,18 @@
             {% if session.user_role == "customer" %}
             <br>
             {{ session.username }} |
-            <a href="/user/{{ session.user_id }}">Cart:</a> {{ session.cart_sum}} euros |
-            <a href="/logout"> Log out</a><br>
+            <a href="{{url_for('user', user_id=session.user_id)}}">Cart:</a> {{ session.cart_sum}} euros |
+            <a href="{{url_for('logout')}}"> Log out</a><br>
 
             {% elif session.user_role == "admin" %}
             <br>
             Logged as admin: {{ session.username }} |
-            <a href="/admin">To admin</a> |
-            <a href="/logout"> Log out</a>
+            <a href="{{url_for('admin_products')}}">To admin</a> |
+            <a href="{{url_for('logout')}}"> Log out</a>
 
             {% else %}
-            <a href="/login">Log in</a> |
-            <a href="/register">Create account</a>
+            <a href="{{url_for('login')}}">Log in</a> |
+            <a href="{{url_for('register')}}">Create account</a>
             {% endif %}
         </span>
     </p>

@@ -11,7 +11,7 @@
             <td>{{ order.created_at.strftime("%d.%m.%Y %H:%M:%S") }}</td>
             <td>total {{ order.total_sum }}€</td>
             <td>
-                <form action="/admin/orders" method="POST">
+                <form action="{{url_for('admin_orders')}}" method="POST">
                     state: waiting
                     <input type="hidden" name="order_id" value="{{ order.id }}">
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

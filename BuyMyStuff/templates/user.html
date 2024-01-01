@@ -21,19 +21,19 @@
 </center>
 {% if items %}
 <center>
-    <p><a href="{{ session.user_id }}/checkout">Accept order</a></p>
+    <p><a href="{{url_for('checkout', user_id=session.user_id)}}">Accept order</a></p>
 </center>
 {% endif %}
 <center>
     <table>
         {% for item in items %}
         <tr>
-            <td><b><a href="/product/{{ item.product_id }}">{{ item.name }}</a></b></td>
+            <td><b><a href="{{url_for('show_product', product_id=item.product_id)}}">{{ item.name }}</a></b></td>
             <td>| {{ item.price }}€/product,</td>
             <td>ammount: {{ item.quantity }},</td>
             <td>total: {{ item.sum }}€</td>
             <td>
-                <form action="/delete_cart_item" method="POST">
+                <form action="{{url_for('delete_cart_item')}}" method="POST">
                     <input type="hidden" name="cart_item_id" value="{{ item.id }}">
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     <input id="delete_button" type="submit" value="Delete">
