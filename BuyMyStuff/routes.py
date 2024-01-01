@@ -107,7 +107,7 @@ def add_review():
             reviews.add(product_id, grade, content)
     except:
         pass
-    return redirect(url_for("show_product"), product_id=product_id)
+    return redirect(url_for("show_product", product_id=product_id))
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin_products():
