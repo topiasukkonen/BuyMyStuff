@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     grade INTEGER,
     content TEXT,
     created_at TIMESTAMP
-)
+);
 
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
