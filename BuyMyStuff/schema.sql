@@ -5,6 +5,17 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT
 );
 
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    creator_id INTEGER REFERENCES users,
+    name TEXT UNIQUE,
+    price NUMERIC(11,2),
+    description TEXT,
+    active BOOLEAN,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
@@ -14,13 +25,12 @@ CREATE TABLE IF NOT EXISTS reviews (
     created_at TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS order_details (
     id SERIAL PRIMARY KEY,
-    creator_id INTEGER REFERENCES users,
-    name TEXT UNIQUE,
-    price NUMERIC(11,2),
-    description TEXT,
-    active BOOLEAN,
+    user_id INTEGER REFERENCES users,
+    handler_id INTEGER REFERENCES users,
+    total_sum NUMERIC(11,2),
+    order_state TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -42,13 +52,4 @@ CREATE TABLE IF NOT EXISTS cart_items (
     created_at TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS order_details (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-    handler_id INTEGER REFERENCES users,
-    total_sum NUMERIC(11,2),
-    order_state TEXT,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
-);
 
