@@ -62,11 +62,11 @@ def add_to_cart():
     try:
         quantity = int(request.form["quantity"])
     except:
-        return redirect(url_for("show_product"), product_id=product_id)
+        return redirect(url_for("show_product", product_id=product_id))
     if not products.active(product_id) or quantity not in range(1, 51):
         return redirect(url_for("index"))
     cart.add(users.user_id(), product_id, quantity)
-    return redirect(url_for("show_product"), product_id=product_id)
+    return redirect(url_for("show_product", product_id=product_id))
 
 @app.route("/user/<int:user_id>")
 def user(user_id):
